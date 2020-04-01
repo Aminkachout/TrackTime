@@ -3,12 +3,12 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 const config = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  apiKey: 'AIzaSyDwjuF5HVxqaIhW90e6uA9tsjVLeH2LqIg',
+  authDomain: 'tracktime-930dd.firebaseapp.com',
+  databaseURL: 'https://tracktime-930dd.firebaseio.com',
+  projectId: 'tracktime-930dd',
+  storageBucket: 'tracktime-930dd.appspot.com',
+  messagingSenderId: '216713139526',
 };
 
 class Firebase {

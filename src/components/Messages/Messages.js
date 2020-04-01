@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { AuthUserContext } from '../Session';
 import { withFirebase } from '../Firebase';
 import MessageList from './MessageList';
-
+import moment from 'moment';
 class Messages extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +12,12 @@ class Messages extends Component {
       text: '',
       loading: false,
       messages: [],
+      pointage:[],
       limit: 5,
+      pointing1 : null,
+      pointing2 : null,
+      pointing3 : null,
+      pointing4 : null,
     };
   }
 
@@ -30,13 +35,19 @@ class Messages extends Component {
       .onSnapshot(snapshot => {
         if (snapshot.size) {
           let messages = [];
-          snapshot.forEach(doc =>
-            messages.push({ ...doc.data(), uid: doc.id }),
+          let pointage = [] ;
+          snapshot.forEach(doc =>{
+            messages.push({ ...doc.data(), uid: doc.id });
+            //push to pointage from firebase
+            pointage.push({ pointing1:doc.data().pointage1, uid: doc.id})
+           }
           );
-
+          console.log('-------------> ',messages)
           this.setState({
             messages: messages.reverse(),
             loading: false,
+          },() => {
+            console.log('message', messages)
           });
         } else {
           this.setState({ messages: null, loading: false });
@@ -49,29 +60,67 @@ class Messages extends Component {
   }
 
   onChangeText = event => {
-    this.setState({ text: event.target.value });
+    this.setState({ text: event.target.value ,pointing1 : new moment().format('LTS')});
   };
 
   onCreateMessage = (event, authUser) => {
-    this.props.firebase.messages().add({
-      text: this.state.text,
-      userId: authUser.uid,
-      createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-    });
 
-    this.setState({ text: '' });
+      this.props.firebase.messages().add({
+        pointing1: moment().toString(),
+        pointing2: null,
+        pointing3: null,
+        pointing4: null,
+        text: this.state.text,
+        createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+        userId: authUser.uid,
+      });
+      this.setState({ text: '' });
 
-    event.preventDefault();
+      event.preventDefault();
+
+
+
   };
 
   onEditMessage = (message, text) => {
     const { uid, ...messageSnapshot } = message;
+    if(message.pointing1 && !message.pointing2 && !message.pointing3 && !message.pointing4 ) {
+      this.props.firebase.message(message.uid).update({
+        ...messageSnapshot,
+        text,
+        pointing2:  (moment().add(1, 'hours')).toString(),
+        editedAt: this.props.firebase.fieldValue.serverTimestamp(),
+      });
+      return;
+    }else if(message.pointing2 && !message.pointing3 && !message.pointing4){
+      this.props.firebase.message(message.uid).update({
+        ...messageSnapshot,
+        text,
+        pointing3:  (moment().add(2, 'hours')).toString(),
+        editedAt: this.props.firebase.fieldValue.serverTimestamp(),
+      });
+      return;
+    }else if(message.pointing3 && !message.pointing4){
+      this.props.firebase.message(message.uid).update({
+        ...messageSnapshot,
+        text,
+        pointing4:  (moment().add(4, 'hours')).toString(),
+        editedAt: this.props.firebase.fieldValue.serverTimestamp(),
+      });
+      return;
+    }
 
+  };
+  onResetPointage = (message, text) => {
+    const { uid, ...messageSnapshot } = message;
     this.props.firebase.message(message.uid).update({
       ...messageSnapshot,
-      text,
-      editedAt: this.props.firebase.fieldValue.serverTimestamp(),
+      pointing1: null,
+      pointing2: null,
+      pointing3: null,
+      pointing4: null,
     });
+
   };
 
   onRemoveMessage = uid => {
@@ -87,17 +136,10 @@ class Messages extends Component {
 
   render() {
     const { text, messages, loading } = this.state;
-
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
-            {!loading && messages && (
-              <button type="button" onClick={this.onNextPage}>
-                More
-              </button>
-            )}
-
             {loading && <div>Loading ...</div>}
 
             {messages && (
@@ -109,20 +151,12 @@ class Messages extends Component {
               />
             )}
 
-            {!messages && <div>There are no messages ...</div>}
+            {!messages && <div>There are no tracking ...</div>}
 
-            <form
-              onSubmit={event =>
+
+              <button type="submit" onClick={event =>
                 this.onCreateMessage(event, authUser)
-              }
-            >
-              <input
-                type="text"
-                value={text}
-                onChange={this.onChangeText}
-              />
-              <button type="submit">Send</button>
-            </form>
+              }>Start</button>
           </div>
         )}
       </AuthUserContext.Consumer>
