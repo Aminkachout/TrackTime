@@ -3,12 +3,12 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 const config = {
-  apiKey: ,
-  authDomain: ,
-  databaseURL: ,
-  projectId: ,
-  storageBucket:,
-  messagingSenderId: ,
+  apiKey: 'AIzaSyDwjuF5HVxqaIhW90e6uA9tsjVLeH2LqIg',
+  authDomain: 'tracktime-930dd.firebaseapp.com',
+  databaseURL: 'https://tracktime-930dd.firebaseio.com',
+  projectId: 'tracktime-930dd',
+  storageBucket: 'tracktime-930dd.appspot.com',
+  messagingSenderId: '216713139526',
 };
 
 class Firebase {

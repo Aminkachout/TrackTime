@@ -70,7 +70,6 @@ class Messages extends Component {
         pointing2: null,
         pointing3: null,
         pointing4: null,
-        text: this.state.text,
         createdAt: this.props.firebase.fieldValue.serverTimestamp(),
         userId: authUser.uid,
       });
@@ -87,24 +86,21 @@ class Messages extends Component {
     if(message.pointing1 && !message.pointing2 && !message.pointing3 && !message.pointing4 ) {
       this.props.firebase.message(message.uid).update({
         ...messageSnapshot,
-        text,
-        pointing2:  (moment().add(1, 'hours')).toString(),
+        pointing2:  moment().toString(),
         editedAt: this.props.firebase.fieldValue.serverTimestamp(),
       });
       return;
     }else if(message.pointing2 && !message.pointing3 && !message.pointing4){
       this.props.firebase.message(message.uid).update({
         ...messageSnapshot,
-        text,
-        pointing3:  (moment().add(2, 'hours')).toString(),
+        pointing3:  moment().toString(),
         editedAt: this.props.firebase.fieldValue.serverTimestamp(),
       });
       return;
     }else if(message.pointing3 && !message.pointing4){
       this.props.firebase.message(message.uid).update({
         ...messageSnapshot,
-        text,
-        pointing4:  (moment().add(4, 'hours')).toString(),
+        pointing4:  moment().toString(),
         editedAt: this.props.firebase.fieldValue.serverTimestamp(),
       });
       return;
@@ -153,10 +149,10 @@ class Messages extends Component {
 
             {!messages && <div>There are no tracking ...</div>}
 
+            {!messages && <button type="submit" onClick={event =>
+              this.onCreateMessage(event, authUser)
+            }>Start</button> }
 
-              <button type="submit" onClick={event =>
-                this.onCreateMessage(event, authUser)
-              }>Start</button>
           </div>
         )}
       </AuthUserContext.Consumer>
