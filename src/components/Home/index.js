@@ -2,14 +2,12 @@ import React from 'react';
 import { compose } from 'recompose';
 
 import { withAuthorization, withEmailVerification } from '../Session';
-import Messages from '../Messages';
+import Pointings from '../Pointages/Pointings';
 
 const HomePage = () => (
   <div>
-    <h1>Home Page</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
-
-    <Messages />
+    <h1>Tracking Page</h1>
+    <Pointings />
   </div>
 );
 

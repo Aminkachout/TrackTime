@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 
 import { AuthUserContext } from '../Session';
 import { withFirebase } from '../Firebase';
-import MessageList from './MessageList';
+import PointingList from './PointingList';
 import moment from 'moment';
-class Messages extends Component {
+import Button from 'react-bootstrap/Button';
+class Pointings extends Component {
   constructor(props) {
     super(props);
 
@@ -42,7 +43,7 @@ class Messages extends Component {
             pointage.push({ pointing1:doc.data().pointage1, uid: doc.id})
            }
           );
-          console.log('-------------> ',messages)
+          console.log('------------->ddddddddddd ',messages)
           this.setState({
             messages: messages.reverse(),
             loading: false,
@@ -71,7 +72,7 @@ class Messages extends Component {
         pointing3: null,
         pointing4: null,
         createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-        userId: authUser.uid,
+        userId:  authUser.uid,
       });
       this.setState({ text: '' });
 
@@ -139,7 +140,7 @@ class Messages extends Component {
             {loading && <div>Loading ...</div>}
 
             {messages && (
-              <MessageList
+              <PointingList
                 authUser={authUser}
                 messages={messages}
                 onEditMessage={this.onEditMessage}
@@ -149,9 +150,9 @@ class Messages extends Component {
 
             {!messages && <div>There are no tracking ...</div>}
 
-            {!messages && <button type="submit" onClick={event =>
+            {!messages &&  <Button type="submit" onClick={event =>
               this.onCreateMessage(event, authUser)
-            }>Start</button> }
+            }>Start</Button> }
 
           </div>
         )}
@@ -160,4 +161,4 @@ class Messages extends Component {
   }
 }
 
-export default withFirebase(Messages);
+export default withFirebase(Pointings);
