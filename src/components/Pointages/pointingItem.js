@@ -9,7 +9,7 @@ class PointingItem extends Component {
 
     this.state = {
       editMode: false,
-      editText: this.props.message.text,
+      editText: this.props.tracking.text,
       switchStop:false,
     };
   }
@@ -17,7 +17,7 @@ class PointingItem extends Component {
   onToggleEditMode = () => {
     this.setState(state => ({
       editMode: !state.editMode,
-      editText: this.props.message.text,
+      editText: this.props.tracking.text,
     }));
   };
 
@@ -27,13 +27,13 @@ class PointingItem extends Component {
 
   onSaveEditText = () => {
     this.setState({switchStop: !this.state.switchStop})
-    this.props.onEditMessage(this.props.message, this.state.editText);
+    this.props.onEditPointing(this.props.tracking, this.state.editText);
 
     this.setState({ editMode: false });
   };
 
   render() {
-    const { authUser, message, onRemoveMessage } = this.props;
+    const { authUser, tracking, onRemoveMessage } = this.props;
     const { editMode, editText } = this.state;
     return (
       <>
@@ -45,12 +45,12 @@ class PointingItem extends Component {
           />
         ) : (
           <>
-            {authUser && message && authUser.uid === message.userId && (
+            {authUser && tracking && authUser.uid === tracking.userId && (
               <span>
               <Button onClick={this.onSaveEditText} variant={this.state.switchStop ? 'success' : 'danger'}>{this.state.switchStop ? 'Start' :'Stop'}</Button>{' '}
 
                 {!editMode && (
-                  <Button onClick={() => onRemoveMessage(message && message.uid)}>
+                  <Button onClick={() => onRemoveMessage(tracking && tracking.uid)}>
                     Delete
                   </Button>
                 )}
@@ -60,22 +60,22 @@ class PointingItem extends Component {
               <thead>
               <tr>
                 <th>#</th>
-                <th>First </th>
-                <th>startDinner</th>
-                <th>stop Dinner</th>
-                <th>Second</th>
-                <th>Result</th>
+                <th>Arriving time  </th>
+                <th>Break time</th>
+                <th>Break time</th>
+                <th>Exit time</th>
+                <th>Amount hours</th>
               </tr>
               </thead>
               <tbody>
               <tr>
                 <td>1</td>
-                <td>{(moment(message.pointing1).format('LTS')).toString()}</td>
-                <td>{message.pointing2 ? (moment(message.pointing2).format('LTS')).toString(): '--'}</td>
-                <td>{message.pointing3 ? (moment(message.pointing3).format('LTS')).toString() : '--'}</td>
-                <td>{message.pointing4 ?(moment(message.pointing4).format('LTS')).toString(): '--'}</td>
+                <td>{(moment(tracking.pointing1).format('LTS')).toString()}</td>
+                <td>{tracking.pointing2 ? (moment(tracking.pointing2).format('LTS')).toString(): '--'}</td>
+                <td>{tracking.pointing3 ? (moment(tracking.pointing3).format('LTS')).toString() : '--'}</td>
+                <td>{tracking.pointing4 ?(moment(tracking.pointing4).format('LTS')).toString(): '--'}</td>
                 <td>
-                  {message.pointing2 && message.pointing1 && message.pointing3 && message.pointing4  ?(((moment.duration(moment(message.pointing2).diff(moment(message.pointing1)))).hours()) + (moment.duration(moment(message.pointing4).diff(moment(message.pointing3)))).hours()).toString()+'H' : '--'}
+                  {tracking.pointing2 && tracking.pointing1 && tracking.pointing3 && tracking.pointing4  ?(((moment.duration(moment(tracking.pointing2).diff(moment(tracking.pointing1)))).hours()) + (moment.duration(moment(tracking.pointing4).diff(moment(tracking.pointing3)))).hours()).toString()+'H' : '--'}
 
                 </td>
               </tr>

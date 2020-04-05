@@ -12,7 +12,7 @@ class Pointings extends Component {
     this.state = {
       text: '',
       loading: false,
-      messages: [],
+      trackings: [],
       pointage:[],
       limit: 5,
       pointing1 : null,
@@ -35,23 +35,22 @@ class Pointings extends Component {
       .limit(this.state.limit)
       .onSnapshot(snapshot => {
         if (snapshot.size) {
-          let messages = [];
+          let trackings = [];
           let pointage = [] ;
           snapshot.forEach(doc =>{
-            messages.push({ ...doc.data(), uid: doc.id });
+            trackings.push({ ...doc.data(), uid: doc.id });
             //push to pointage from firebase
             pointage.push({ pointing1:doc.data().pointage1, uid: doc.id})
            }
           );
-          console.log('------------->ddddddddddd ',messages)
           this.setState({
-            messages: messages.reverse(),
+            trackings: trackings.reverse(),
             loading: false,
           },() => {
-            console.log('message', messages)
+            console.log('message', trackings)
           });
         } else {
-          this.setState({ messages: null, loading: false });
+          this.setState({ trackings: null, loading: false });
         }
       });
   };
@@ -64,7 +63,7 @@ class Pointings extends Component {
     this.setState({ text: event.target.value ,pointing1 : new moment().format('LTS')});
   };
 
-  onCreateMessage = (event, authUser) => {
+  onStart = (event, authUser) => {
 
       this.props.firebase.messages().add({
         pointing1: moment().toString(),
@@ -82,7 +81,7 @@ class Pointings extends Component {
 
   };
 
-  onEditMessage = (message, text) => {
+  onEditPointing = (message, text) => {
     const { uid, ...messageSnapshot } = message;
     if(message.pointing1 && !message.pointing2 && !message.pointing3 && !message.pointing4 ) {
       this.props.firebase.message(message.uid).update({
@@ -132,26 +131,25 @@ class Pointings extends Component {
   };
 
   render() {
-    const { text, messages, loading } = this.state;
+    const { text, trackings, loading } = this.state;
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
             {loading && <div>Loading ...</div>}
-
-            {messages && (
+            {trackings && (
               <PointingList
                 authUser={authUser}
-                messages={messages}
-                onEditMessage={this.onEditMessage}
+                trackings={trackings}
+                onEditPointing={this.onEditPointing}
                 onRemoveMessage={this.onRemoveMessage}
               />
             )}
 
-            {!messages && <div>There are no tracking ...</div>}
+            {!trackings && <div>There are no tracking ...</div>}
 
-            {!messages &&  <Button type="submit" onClick={event =>
-              this.onCreateMessage(event, authUser)
+            {!trackings &&  <Button type="submit" onClick={event =>
+              this.onStart(event, authUser)
             }>Start</Button> }
 
           </div>

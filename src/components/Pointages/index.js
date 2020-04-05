@@ -1,3 +1,3 @@
-import Messages from './Pointings';
+import Trackings from './Pointings';
 
-export default Messages;
+export default Trackings;

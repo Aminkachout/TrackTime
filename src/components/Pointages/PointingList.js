@@ -4,19 +4,19 @@ import PointingItem from './pointingItem';
 
 const PointingList = ({
   authUser,
-  messages,
-  onEditMessage,
+                        trackings,
+                        onEditPointing,
   onRemoveMessage,
 }) => {
-  console.log('----> msg in message list ', messages)
+  console.log('----> msg in message list ', trackings)
   return  (
     <ul>
-      {messages.map(message => (
+      {trackings.map(track => (
         <PointingItem
           authUser={authUser}
-          key={message.uid}
-          message={message}
-          onEditMessage={onEditMessage}
+          key={track.uid}
+          tracking={track}
+          onEditPointing={onEditPointing}
           onRemoveMessage={onRemoveMessage}
         />
       ))}
