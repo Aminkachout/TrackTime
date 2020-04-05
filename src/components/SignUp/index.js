@@ -4,8 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import * as ROLES from '../../constants/roles';
-import { Button, Form } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 const SignUpPage = () => (
   <div>
@@ -62,9 +61,6 @@ class SignUpFormBase extends Component {
         );
       })
       .then(() => {
-        return this.props.firebase.doSendEmailVerification();
-      })
-      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
@@ -104,49 +100,41 @@ class SignUpFormBase extends Component {
       username === '';
 
     return (
-      <Form onSubmit={this.onSubmit}>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridEmail"  name="username"
-                      value={username}
-                      onChange={this.onChange}
-                      type="text"
-                      placeholder="Full Name">
-            <Form.Label>Username</Form.Label>
-            <Form.Control type="text" placeholder="Username" />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridEmail"  name="email"
-                      value={email}
-                      onChange={this.onChange}
-                      type="text"
-                      placeholder="Email Address">
-            <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridPassword" name="passwordOne"
-                      value={passwordOne}
-                      onChange={this.onChange}
-                      type="password"
-                      placeholder="Password">
-            <Form.Label >Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridPassword" name="passwordTwo"
-                      value={passwordTwo}
-                      onChange={this.onChange}
-                      type="password"
-                      placeholder="Confirm Password">
-            <Form.Label >Confirm Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-        </Form.Row>
-
-
-        <Button type="submit">
-          Submit
+      <form onSubmit={this.onSubmit}>
+        <input
+          name="username"
+          value={username}
+          onChange={this.onChange}
+          type="text"
+          placeholder="Full Name"
+        />
+        <input
+          name="email"
+          value={email}
+          onChange={this.onChange}
+          type="text"
+          placeholder="Email Address"
+        />
+        <input
+          name="passwordOne"
+          value={passwordOne}
+          onChange={this.onChange}
+          type="password"
+          placeholder="Password"
+        />
+        <input
+          name="passwordTwo"
+          value={passwordTwo}
+          onChange={this.onChange}
+          type="password"
+          placeholder="Confirm Password"
+        />
+        <Button disabled={isInvalid} type="submit">
+          Sign Up
         </Button>
+
         {error && <p>{error.message}</p>}
-      </Form>
+      </form>
     );
   }
 }
