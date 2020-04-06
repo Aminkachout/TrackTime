@@ -47,7 +47,7 @@ class Pointings extends Component {
             trackings: trackings.reverse(),
             loading: false,
           },() => {
-            console.log('message', trackings)
+            console.log('uid', trackings)
           });
         } else {
           this.setState({ trackings: null, loading: false });
@@ -56,6 +56,8 @@ class Pointings extends Component {
   };
 
   componentWillUnmount() {
+    if(this.state.trackings)
+    {this.onRemoveMessage(this.state.trackings[0].uid);}
     this.unsubscribe();
   }
 

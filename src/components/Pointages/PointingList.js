@@ -8,7 +8,6 @@ const PointingList = ({
                         onEditPointing,
   onRemoveMessage,
 }) => {
-  console.log('----> msg in message list ', trackings)
   return  (
     <ul>
       {trackings.map(track => (
